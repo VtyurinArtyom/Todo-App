@@ -14,8 +14,15 @@
 import CustomBtn from "../Btns/CustomBtn.vue";
 import CustomDialog from "./CustomDialog.vue";
 export default {
-  props: ["deleteDialog"],
+  props: {
+    deleteDialog: Boolean,
+  },
   components: { CustomDialog, CustomBtn },
+  methods: {
+    closeDelete() {
+      this.$emit("closeDelete");
+    },
+  },
 };
 </script>
 

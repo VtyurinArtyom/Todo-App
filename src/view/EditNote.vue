@@ -13,23 +13,13 @@
         @closeDialog="editTitleDialog = false"
         @saveText="saveTitle"
       />
-      <div class="note__global_actions">
-        <CustomBtn
-          @click="saveEdit"
-          class="note__btn"
-          label="Сохранить изменения"
-        />
-        <CustomBtn
-          @click="resetEdit"
-          class="note__btn"
-          label="Откатить изменения"
-        />
-        <router-link to="/">
-          <CustomBtn class="note__btn" label="Вернуться к списку" />
-        </router-link>
-      </div>
+      <EditNoteAcions
+        class="note__global_actions"
+        @saveEdit="saveEdit"
+        @resetEdit="resetEdit"
+      />
       <CustomBtn
-        style="margin: 15px auto"
+        class="addBtn"
         @click="createTodoDialog = true"
         label="Добавить todo"
       />
@@ -40,63 +30,38 @@
         @addTodo="addTodo"
         @closeCreateTodoDialog="createTodoDialog = false"
       />
-      <div class="note__todos">
-        <p class="note__todo" v-for="(el, index) in note.data" :key="index">
-          <span :class="{ note__todo_id_complete: el.isDone }">{{
-            el.id
-          }}</span>
-          <span
-            class="note__todo_text"
-            :class="{ note__todo_text_complete: el.isDone }"
-            >{{ el.text }}</span
-          >
-          <span class="note__actions">
-            <input type="checkbox" v-model="el.isDone" :id="index" />
-            <label
-              style="width: 87px"
-              v-if="el.isDone"
-              class="green"
-              :for="index"
-              >Сделано</label
-            >
-            <label v-else class="red" :for="index">Не сделано</label>
-            <img
-              @click="openDelete(index)"
-              src="@/assets/delete.png"
-              alt="delete"
-            />
-            <img
-              @click="openEditText(index)"
-              src="@/assets/edit.png"
-              alt="edit"
-            />
-          </span>
-        </p>
-        <EditDialog
-          :editTextDialog="editTextDialog"
-          :text="editText"
-          @changeText="changeText($event)"
-          @closeDialog="editTextDialog = false"
-          @saveText="saveText"
-        />
-        <DeleteDialog
-          :deleteDialog="deleteDialog"
-          @closeDelete="deleteDialog = false"
-          @deleteConfirm="deleteConfirm"
-        />
-      </div>
+      <NoteTodos
+        :note-data="note.data"
+        :edit-text="editText"
+        :edit-text-dialog="editTextDialog"
+        :delete-dialog="deleteDialog"
+        @openEditText="openEditText"
+        @openDelete="openDelete"
+        @changeText="changeText($event)"
+        @saveText="saveText"
+        @closeDialog="editTextDialog = false"
+        @closeDelete="deleteDialog = false"
+        @deleteConfirm="deleteConfirm"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import DeleteDialog from "@/components/Modal/DeleteDialog.vue";
 import CustomBtn from "@/components/Btns/CustomBtn.vue";
 import router from "@/router";
 import EditDialog from "@/components/Modal/EditDialog.vue";
 import CreateTodoDialog from "@/components/Modal/CreateTodoDialog.vue";
+import EditNoteAcions from "@/components/EditNotePage/EditNoteAcions.vue";
+import NoteTodos from "@/components/EditNotePage/NoteTodos.vue";
 export default {
-  components: { DeleteDialog, CustomBtn, EditDialog, CreateTodoDialog },
+  components: {
+    CustomBtn,
+    EditDialog,
+    CreateTodoDialog,
+    EditNoteAcions,
+    NoteTodos,
+  },
   name: "EditNote",
   data() {
     return {
@@ -192,34 +157,10 @@ export default {
   &__btn {
     margin: 0 10px;
   }
-  &__todos {
-    max-width: 1200px;
-    margin: 10px auto;
-    padding: 10px 20px;
-    border: 2px deepskyblue solid;
-    background: silver;
-  }
-  &__todo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    &_id_complete {
-      text-decoration: line-through;
-    }
-    &_text {
-      max-width: 80%;
-      &_complete {
-        text-decoration: line-through;
-      }
-    }
-  }
-  &__actions {
-    display: flex;
-    justify-content: space-between;
-    width: 185px;
-  }
 }
-
+.addBtn {
+  margin: 15px auto;
+}
 img {
   width: 17px;
   height: 17px;

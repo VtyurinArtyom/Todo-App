@@ -21,7 +21,10 @@
 import CustomBtn from "../Btns/CustomBtn.vue";
 import CustomDialog from "./CustomDialog.vue";
 export default {
-  props: ["todo", "createTodoDialog"],
+  props: {
+    todo: String,
+    createTodoDialog: Boolean,
+  },
   components: { CustomDialog, CustomBtn },
 };
 </script>

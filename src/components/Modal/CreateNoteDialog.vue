@@ -7,7 +7,7 @@
       :value="noteTitle"
       @input="$emit('changeNoteTitle', $event.target.value)"
     />
-    <p style="margin-bottom: 0px">Название todo</p>
+    <p class="todo_title">Название todo</p>
     <form @submit.prevent="$emit('addTodo')">
       <input
         class="todo__input"
@@ -20,9 +20,9 @@
     </form>
     <p class="todo__item" v-for="(el, index) in todoList" :key="index">
       <span>{{ index + 1 }}</span>
-      <span style="margin: 0 15px">{{ el.text }}</span>
+      <span class="todo__item_text">{{ el.text }}</span>
       <span class="todo__item__actions">
-        <span class="red" style="margin: 0 10px">Не сделано</span>
+        <span class="red todo__item__actions_incomplete">Не сделано</span>
       </span>
     </p>
     <div class="todo__actions">
@@ -37,7 +37,12 @@ import CustomBtn from "../Btns/CustomBtn.vue";
 import CustomDialog from "./CustomDialog.vue";
 export default {
   components: { CustomDialog, CustomBtn },
-  props: ["noteTitle", "todo", "todoList", "createDialog"],
+  props: {
+    noteTitle: String,
+    todo: String,
+    todoList: Array,
+    createDialog: Boolean,
+  },
   data() {
     return {};
   },
@@ -51,6 +56,9 @@ export default {
   height: 20px;
 }
 .todo {
+  &_title {
+    margin-bottom: 0;
+  }
   &__input {
     margin: 15px;
   }
@@ -58,9 +66,15 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &_text {
+      margin: 0 15px;
+    }
     &__actions {
       display: flex;
       align-items: center;
+      &_incomplete {
+        margin: 0 10px;
+      }
     }
   }
   &__actions {

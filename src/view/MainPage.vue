@@ -15,34 +15,16 @@
     />
     <div class="notes">
       <h2>Всего заметок: {{ notes.length }}</h2>
-      <div class="notes__items">
-        <div class="notes__item" v-for="(el, index) in notes" :key="index">
-          <h3>{{ el.title }}</h3>
-          <DeleteDialog
-            :deleteDialog="deleteDialog"
-            @closeDelete="deleteDialog = false"
-            @deleteConfirm="deleteConfirm"
-          />
-          <div class="notes__item_actions">
-            <p style="cursor: pointer" @click="openDelete(index)">Удалить</p>
-            <router-link style="text-decoration: none; color: black" to="/edit">
-              <p @click="saveIndex(index)">Отредактировать</p>
-            </router-link>
-          </div>
-          <p class="notes__todo" v-for="(elem, ind) in el.data" :key="ind">
-            <span :class="{ notes__todo_text_complete: elem.isDone }">{{
-              elem.id
-            }}</span>
-            <span
-              class="notes__todo_text"
-              :class="{ notes__todo_text_complete: elem.isDone }"
-              >{{ elem.text }}</span
-            >
-            <span class="red" v-if="!elem.isDone">Не сделано</span>
-            <span class="green" style="width: 87px" v-else>Сделано</span>
-          </p>
-        </div>
-      </div>
+      <DeleteDialog
+        :deleteDialog="deleteDialog"
+        @closeDelete="deleteDialog = false"
+        @deleteConfirm="deleteConfirm"
+      />
+      <NotesItem
+        :notes="notes"
+        @openDelete="openDelete"
+        @saveIndex="saveIndex"
+      />
     </div>
   </div>
 </template>
@@ -51,8 +33,9 @@
 import CustomBtn from "@/components/Btns/CustomBtn.vue";
 import CreateNoteDialog from "@/components/Modal/CreateNoteDialog.vue";
 import DeleteDialog from "@/components/Modal/DeleteDialog.vue";
+import NotesItem from "@/components/MainPage/NotesItem.vue";
 export default {
-  components: { CustomBtn, CreateNoteDialog, DeleteDialog },
+  components: { CustomBtn, CreateNoteDialog, DeleteDialog, NotesItem },
   name: "MainPage",
   data() {
     return {
@@ -130,7 +113,7 @@ export default {
       this.deleteDialog = true;
     },
     deleteConfirm() {
-      this.notes = this.notes.splice(this.editedId, 1);
+      this.notes.splice(this.editedId, 1);
       localStorage.setItem("noteList", JSON.stringify(this.notes));
       this.deleteDialog = false;
     },
@@ -179,36 +162,5 @@ h3 {
   border: 2px green solid;
   margin: 20px auto;
   background: bisque;
-  &__items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  &__item {
-    border: 1px white solid;
-    margin: 20px 10px;
-    max-width: 460px;
-    padding: 15px;
-    min-width: 43%;
-    &_actions {
-      display: flex;
-      justify-content: space-around;
-    }
-  }
-  &__todo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    &_text {
-      text-overflow: ellipsis;
-      max-width: 200px;
-      overflow: hidden;
-      white-space: nowrap;
-      margin: 0 10px;
-      &_complete {
-        text-decoration: line-through;
-      }
-    }
-  }
 }
 </style>

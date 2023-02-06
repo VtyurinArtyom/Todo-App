@@ -21,7 +21,10 @@
 import CustomBtn from "../Btns/CustomBtn.vue";
 import CustomDialog from "./CustomDialog.vue";
 export default {
-  props: ["editTextDialog", "text"],
+  props: {
+    editTextDialog: Boolean,
+    text: String,
+  },
   components: { CustomBtn, CustomDialog },
 };
 </script>

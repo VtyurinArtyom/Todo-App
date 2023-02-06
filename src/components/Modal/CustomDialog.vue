@@ -8,7 +8,9 @@
 
 <script>
 export default {
-  props: ["show"],
+  props: {
+    show: Boolean,
+  },
 };
 </script>
 
